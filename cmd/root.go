@@ -66,7 +66,7 @@ type Github struct {
 	Token string `mapstructure:"token"`
 }
 
-func NewRootCommand(a App) *cobra.Command {
+func NewRootCommand(a *App) *cobra.Command {
 	// rootCmd represents the base command when called without any subcommands
 	rootCmd := &cobra.Command{
 		Use:   "cobra-late-bind",
