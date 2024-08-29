@@ -13,7 +13,7 @@ type ListRepoOpts struct {
 	owner string
 }
 
-func NewFooCommand(a App) *cobra.Command {
+func NewFooCommand(a *App) *cobra.Command {
 	// fooCmd represents the foo command
 	opts := ListRepoOpts{}
 	cmd := &cobra.Command{
@@ -26,13 +26,12 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			fmt.Println("Foo RunE ", a.Config.Data.Github.Token, a.RepoLister)
+			fmt.Println("Foo RunE ", a.Config.Data.Github.Token)
 			repositories, err := a.ListRepositories(cmd.Context(), opts)
 			cmd.Println(repositories)
 			return err
 		},
 	}
-	fmt.Println("NewFooCommand ", a.Config.Data.Github.Token, a.RepoLister)
 	cmd.Flags().StringVar(&opts.owner, "owner", "", "owner to list repositories for")
 	return cmd
 }

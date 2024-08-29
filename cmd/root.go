@@ -30,16 +30,11 @@ type GhRepoLister struct {
 }
 
 func (a *App) ListRepositories(ctx context.Context, opts ListRepoOpts) ([]string, error) {
-	fmt.Println("App.ListRepositories()")
 	return a.RepoLister.RepositoryNames(ctx, opts.owner)
 }
 
 func (a *App) BindServices() {
-	fmt.Println("Binding services")
-	if a.RepoLister == nil {
-		a.RepoLister = &GhRepoLister{Cli: github.NewClient(nil).WithAuthToken(a.Config.Data.Github.Token)}
-		fmt.Println("Set repolister")
-	}
+	a.RepoLister = &GhRepoLister{Cli: github.NewClient(nil).WithAuthToken(a.Config.Data.Github.Token)}
 }
 func (rl *GhRepoLister) RepositoryNames(ctx context.Context, owner string) ([]string, error) {
 	repositories, _, err := rl.Cli.Repositories.List(ctx, owner, nil)
@@ -78,7 +73,10 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+			fmt.Printf("prerunE github token %s\n", a.Config.Data.Github.Token)
 			a.Config.BindFlags(cmd)
+			a.BindServices()
+			fmt.Printf("prerunE post bind github token %s\n", a.Config.Data.Github.Token)
 			return nil
 		},
 		Run: func(cmd *cobra.Command, args []string) {

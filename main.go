@@ -7,16 +7,13 @@ import (
 	"cobra-late-bind/cmd"
 	"fmt"
 	"os"
-
-	"github.com/google/go-github/v55/github"
 )
 
 func main() {
 	config := cmd.NewConfig()
-	cli := github.NewClient(nil).WithAuthToken(config.Data.Github.Token)
-	a := cmd.App{
+	a := &cmd.App{
 		Config:     config,
-		RepoLister: &cmd.GhRepoLister{Cli: cli},
+		RepoLister: nil,
 	}
 	if err := cmd.NewRootCommand(a).Execute(); err != nil {
 		fmt.Println(err)
